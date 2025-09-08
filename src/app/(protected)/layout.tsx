@@ -1,6 +1,7 @@
 'use client';
 
 import { SiteHeader } from '@/components/shared/header';
+import { UserHeader } from '@/components/shared/user-header';
 import { AdminSidebar } from '@/components/sidebar/admin/admin-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { USER_ROLE } from '@/constants/user.constants';
@@ -24,18 +25,15 @@ const AppLayout = ({ children }: Props) => {
     if (userRole === USER_ROLE.ADMIN) {
       return <AdminSidebar />;
     }
-    return null;
   };
   return (
-    <Protected allowedRoles={[USER_ROLE.ADMIN]}>
+    <Protected allowedRoles={[USER_ROLE.ADMIN, USER_ROLE.USER]}>
       <ReactQueryProvider>
         <SidebarProvider>
           {userRole && renderSidebar(userRole)}
           <SidebarInset>
-            <SiteHeader />
-            <div className='container mx-auto flex flex-1 flex-col w-full gap-2 bg-secondary'>
-              {children}
-            </div>
+            {userRole === USER_ROLE.ADMIN ? <SiteHeader /> : <UserHeader />}
+            <div className='container mx-auto flex flex-1 flex-col w-full gap-2'>{children}</div>
           </SidebarInset>
         </SidebarProvider>
       </ReactQueryProvider>

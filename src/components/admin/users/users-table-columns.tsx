@@ -50,7 +50,7 @@ export const usersTableColumns: ColumnDef<IUser>[] = [
       return (
         <div className='flex items-center gap-2 text-xs font-normal text-left max-w-[200px] break-words text-foreground'>
           <Avatar>
-            <AvatarImage src={row.original.profilePicUrl} className='object-cover' />
+            <AvatarImage src={row.original.avatar} className='object-cover' />
             <AvatarFallback>
               {row.original.firstName?.charAt(0).toUpperCase() +
                 row.original.lastName?.charAt(0).toUpperCase()}
@@ -70,7 +70,7 @@ export const usersTableColumns: ColumnDef<IUser>[] = [
     filterFn: multiColumnFilterFn,
   },
   {
-    accessorKey: 'phoneNo',
+    accessorKey: 'phoneNumber',
     header: ({ column }) => {
       return <DataTableColumnHeader column={column} title='Phone Number' />;
     },

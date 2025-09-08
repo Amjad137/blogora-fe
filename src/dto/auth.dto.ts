@@ -7,13 +7,13 @@ export interface SignUpRequestDTO {
   lastName: string;
   email: string;
   password: string;
-  phoneNo: string;
+  phoneNumber: string;
   address: IAddress;
-  profilePicUrl?: string;
+  avatar?: string;
 }
 
 export interface AuthResponseDTO {
-  user: Omit<IUser, 'password'>;
+  user: IUser;
   accessToken: string;
 }
 

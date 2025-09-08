@@ -25,9 +25,5 @@ export const Public = ({ children }: PublicProps) => {
     return <PageLoader />;
   }
 
-  if (user && isAuthenticated) {
-    return null;
-  }
-
   return <>{children}</>;
 };

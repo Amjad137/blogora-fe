@@ -6,11 +6,13 @@ import { IPaginationQuery } from './common.dto';
 export interface IUser extends IBaseEntity {
   firstName: string;
   lastName: string;
-  role: USER_ROLE;
-  phoneNo: string;
   email: string;
+  phoneNumber: string;
+  role: USER_ROLE;
+  avatar?: string;
   address: IAddress;
-  profilePicUrl?: string;
+  isActive: boolean;
+  isEmailVerified: boolean;
 }
 
 export interface IUserQuery extends IPaginationQuery {

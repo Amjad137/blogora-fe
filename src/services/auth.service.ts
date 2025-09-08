@@ -12,7 +12,7 @@ import { StatusCodes } from 'http-status-codes';
 
 export const signUp = async (userData: SignUpRequestDTO): Promise<AuthResponseDTO> => {
   const response = await Axios.post<ICommonResponseDTO<AuthResponseDTO>>(
-    '/v1/auth/sign-up',
+    '/v1/auth/register',
     { ...userData },
     {
       skipAuth: true,
@@ -24,7 +24,7 @@ export const signUp = async (userData: SignUpRequestDTO): Promise<AuthResponseDT
 
 export const signIn = async (credentials: SignInRequestDTO): Promise<AuthResponseDTO> => {
   const response = await Axios.post<ICommonResponseDTO<AuthResponseDTO>>(
-    '/v1/auth/sign-in',
+    '/v1/auth/login',
     { ...credentials },
     {
       skipAuth: true,
@@ -36,7 +36,7 @@ export const signIn = async (credentials: SignInRequestDTO): Promise<AuthRespons
 
 export const signOut = async (): Promise<null> => {
   try {
-    const response = await Axios.post<ICommonResponseDTO<null>>('/v1/auth/sign-out');
+    const response = await Axios.post<ICommonResponseDTO<null>>('/v1/auth/logout');
     toast({
       title: 'See You Soon!',
       description: 'Signed out successfully.',
@@ -62,9 +62,8 @@ export const signOut = async (): Promise<null> => {
   }
 };
 
-export const refreshToken = async (): Promise<{ accessToken: string }> => {
-  const response =
-    await Axios.post<ICommonResponseDTO<{ accessToken: string }>>('/v1/auth/refresh-token');
+export const refreshToken = async (): Promise<AuthResponseDTO> => {
+  const response = await Axios.post<ICommonResponseDTO<AuthResponseDTO>>('/v1/auth/refresh');
 
   return response.data.data;
 };
@@ -74,6 +73,7 @@ export const getMe = async (): Promise<IUser> => {
     useAuthStore.getState();
   try {
     const response = await Axios.get<ICommonResponseDTO<{ user: IUser }>>('/v1/auth/me');
+    console.log('🚀 ~ getMe ~ response:', response);
     const { user } = response.data.data;
     setLoading(false);
     setUser(user);
@@ -128,17 +128,15 @@ export const refreshUser = async (): Promise<IUser> => {
 };
 
 export const updatePassword = async ({
-  userId,
   currentPassword,
   newPassword,
 }: {
-  userId: string;
   currentPassword: string;
   newPassword: string;
 }) => {
   try {
     const response = await Axios.patch<ICommonResponseDTO<{ message: string }>>(
-      `/v1/user/${userId}/password`,
+      `/v1/auth/change-password`,
       {
         currentPassword,
         newPassword,
@@ -168,41 +166,11 @@ export const updatePassword = async ({
   }
 };
 
-export const forgotPassword = async (userName: string) => {
+export const forgotPassword = async (email: string) => {
   try {
     const response = await Axios.post<ICommonResponseDTO<{ message: string; resetUrl?: string }>>(
       '/v1/auth/forgot-password',
-      { userName },
-      {
-        skipAuth: true,
-        skipAuthRefresh: true,
-      } as AxiosAuthRefreshRequestConfig,
-    );
-    return response.data.data;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      const { errorMessage } = ErrorHandler(error);
-      toast({
-        title: 'Error!',
-        description: errorMessage,
-        variant: 'destructive',
-      });
-    } else {
-      toast({
-        title: 'Error!',
-        description: ERROR_MESSAGES.UNKNOWN_ERR,
-        variant: 'destructive',
-      });
-    }
-    throw error;
-  }
-};
-
-export const validateResetToken = async (token: string, userId: string) => {
-  try {
-    const response = await Axios.post<ICommonResponseDTO<{ isValid: boolean; message?: string }>>(
-      '/v1/auth/validate-reset-token',
-      { token, userId },
+      { email },
       {
         skipAuth: true,
         skipAuthRefresh: true,
@@ -230,11 +198,9 @@ export const validateResetToken = async (token: string, userId: string) => {
 
 export const resetPassword = async ({
   token,
-  userId,
   newPassword,
 }: {
   token: string;
-  userId: string;
   newPassword: string;
 }) => {
   const { clearSensitiveData } = useAuthStore.getState();
@@ -242,7 +208,7 @@ export const resetPassword = async ({
   try {
     const response = await Axios.post<ICommonResponseDTO<{ message: string }>>(
       '/v1/auth/reset-password',
-      { token, userId, newPassword },
+      { token, newPassword },
       {
         skipAuth: true,
         skipAuthRefresh: true,

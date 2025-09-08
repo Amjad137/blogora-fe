@@ -65,7 +65,7 @@ export const getSignupSchema = (mode: 'create' | 'edit' = 'create') => {
         .noSpecialChars('City cannot contain special characters'),
     }),
     email: string().email('Invalid email format').required('Email is required'),
-    phoneNo: string()
+    phoneNumber: string()
       .matches(/^\+?\d{10,15}$/, 'Please enter a valid phone number')
       .required('Phone number is required'),
 

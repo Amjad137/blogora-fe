@@ -26,8 +26,8 @@ const EditUserDialog = ({ open, setOpen, userData }: Props) => {
     defaultValues: {
       firstName: userData.firstName ?? '',
       lastName: userData.lastName ?? '',
-      phoneNo: userData.phoneNo ?? '',
-      profilePicture: userData.profilePicUrl ?? '',
+      phoneNumber: userData.phoneNumber ?? '',
+      profilePicture: userData.avatar ?? '',
       address: {
         line1: userData.address?.line1 ?? '',
         line2: userData.address?.line2 ?? '',
@@ -45,7 +45,7 @@ const EditUserDialog = ({ open, setOpen, userData }: Props) => {
     let uploadedImageKey: string | undefined; // Track uploaded image for cleanup
 
     try {
-      let profilePicUrl: string | undefined = userData.profilePicUrl; // Keep existing URL by default
+      let avatar: string | undefined = userData.avatar; // Keep existing URL by default
 
       // Upload profile picture first if a new file is provided
       if (values.profilePicture && values.profilePicture instanceof File) {
@@ -56,10 +56,10 @@ const EditUserDialog = ({ open, setOpen, userData }: Props) => {
           const uploadResult = await uploadPublicImage(
             values.profilePicture,
             S3_FOLDERS.PROFILE_IMAGES,
-            extractS3KeyFromUrl(userData.profilePicUrl), // Extract old key for replacement
+            extractS3KeyFromUrl(userData.avatar), // Extract old key for replacement
           );
 
-          profilePicUrl = uploadResult.url; // Use new public URL
+          avatar = uploadResult.url; // Use new public URL
           uploadedImageKey = uploadResult.key; // Store key for potential cleanup
         } catch (uploadError) {
           console.error('Profile picture upload failed:', uploadError);
@@ -77,14 +77,14 @@ const EditUserDialog = ({ open, setOpen, userData }: Props) => {
       const { profilePicture, ...cleanValues } = values;
       const updateData = {
         ...cleanValues,
-        profilePicUrl,
+        avatar,
       };
 
       await updateUser({ userId: userData._id, userData: updateData });
 
       // Update form field with new URL after successful upload
-      if (profilePicUrl && profilePicUrl !== userData.profilePicUrl) {
-        setValue('profilePicture', profilePicUrl);
+      if (avatar && avatar !== userData.avatar) {
+        setValue('profilePicture', avatar);
       }
 
       toast({

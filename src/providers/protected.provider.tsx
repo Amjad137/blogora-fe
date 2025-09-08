@@ -15,6 +15,7 @@ interface ProtectedProps {
 }
 
 export const Protected = ({ children, allowedRoles }: ProtectedProps) => {
+  console.log('🚀 ~ Protected ~ allowedRoles:', allowedRoles);
   const router = useRouter();
   const { user, userRole, loading, isInitialized, isAuthenticated } = useAuthStore();
 
@@ -36,7 +37,6 @@ export const Protected = ({ children, allowedRoles }: ProtectedProps) => {
   // Check account status (applies to all users including admins for security)
   if (user && isAuthenticated) {
     if (!user.isActive) return <AccountInactive />;
-    return;
   }
 
   if (allowedRoles && userRole && !allowedRoles.includes(userRole)) {

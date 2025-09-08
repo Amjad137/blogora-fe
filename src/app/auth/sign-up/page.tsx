@@ -43,7 +43,7 @@ const Signup = () => {
         city: '',
       },
       email: '',
-      phoneNo: '',
+      phoneNumber: '',
       password: '',
       confirmPassword: '',
     },
@@ -55,7 +55,7 @@ const Signup = () => {
     let uploadedImageKey: string | undefined; // Track uploaded image for cleanup
 
     try {
-      let profilePicUrl: string | undefined;
+      let avatar: string | undefined;
 
       // Upload profile picture first if provided
       if (values.profilePicture && values.profilePicture instanceof File) {
@@ -65,7 +65,7 @@ const Signup = () => {
             S3_FOLDERS.PROFILE_IMAGES,
           );
           console.log('🚀 ~ signUpFormOnSubmit ~ uploadResult:', uploadResult);
-          profilePicUrl = uploadResult.url; // Use public URL instead of key
+          avatar = uploadResult.url; // Use public URL instead of key
           uploadedImageKey = uploadResult.key; // Store key for potential cleanup
         } catch (uploadError) {
           console.error('Profile picture upload failed:', uploadError);
@@ -83,7 +83,7 @@ const Signup = () => {
       const { profilePicture, ...cleanValues } = values;
       const signupData: SignUpRequestDTO = {
         ...(cleanValues as SignUpRequestDTO),
-        profilePicUrl,
+        avatar: avatar,
       };
 
       const response = await signUp(signupData);

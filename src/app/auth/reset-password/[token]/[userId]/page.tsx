@@ -10,11 +10,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
-import { resetPassword, validateResetToken } from '@/services/auth.service';
+import { resetPassword } from '@/services/auth.service';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { InferType, object, ref, string } from 'yup';
 
 const resetPasswordSchema = object({
@@ -30,32 +30,9 @@ const ResetPasswordPage = () => {
   const params = useParams();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isValidating, setIsValidating] = useState(true);
-  const [isTokenValid, setIsTokenValid] = useState(false);
 
   const token = params.token as string;
   const userId = params.userId as string;
-
-  // Validate token on component mount
-  useEffect(() => {
-    const validateToken = async () => {
-      if (!token || !userId) {
-        setIsValidating(false);
-        return;
-      }
-
-      try {
-        await validateResetToken(token, userId);
-        setIsTokenValid(true);
-      } catch {
-        setIsTokenValid(false);
-      } finally {
-        setIsValidating(false);
-      }
-    };
-
-    validateToken();
-  }, [token, userId]);
 
   const form = useForm<FormValues>({
     resolver: yupResolver(resetPasswordSchema),
@@ -70,7 +47,6 @@ const ResetPasswordPage = () => {
       setIsSubmitting(true);
       await resetPassword({
         token,
-        userId,
         newPassword: values.newPassword,
       });
 
@@ -90,28 +66,8 @@ const ResetPasswordPage = () => {
     }
   });
 
-  // Show loading while validating token
-  if (isValidating) {
-    return (
-      <Card className='min-w-[350px]'>
-        <CardHeader className='p-3'>
-          <CardTitle className='text-center text-xl font-bold'>Validating Reset Link</CardTitle>
-        </CardHeader>
-
-        <CardContent className='flex flex-col gap-5'>
-          <div className='text-center'>
-            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2'></div>
-            <p className='text-muted-foreground'>
-              Please wait while we validate your password reset link...
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
   // Validate token and userId are present
-  if (!token || !userId || !isTokenValid) {
+  if (!token || !userId) {
     return (
       <Card className='min-w-[350px]'>
         <CardHeader className='p-3'>

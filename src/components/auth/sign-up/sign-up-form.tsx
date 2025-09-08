@@ -61,7 +61,7 @@ const SignUpForm = ({ form, onSubmit, isSubmitting, isEditing }: Props) => {
 
             <FormField
               control={form.control}
-              name='phoneNo'
+              name='phoneNumber'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel required>Phone Number</FormLabel>

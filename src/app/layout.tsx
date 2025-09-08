@@ -14,7 +14,7 @@ interface RootLayoutProps {
 }
 
 export const metadata: Metadata = {
-  title: { default: 'My Template', template: '%s | My Template' },
+  title: { default: 'Blogora', template: '%s | Blogora' },
   description: '',
 };
 

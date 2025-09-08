@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useAuthStore } from '@/stores/auth.store';
 import { updatePassword } from '@/services/auth.service';
 import { useState } from 'react';
 import { passwordStrength } from './sign-up/schema/sign-up.schema';
@@ -35,7 +34,6 @@ interface UpdatePasswordModalProps {
 }
 
 const UpdatePasswordModal = ({ open, setOpen }: UpdatePasswordModalProps) => {
-  const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
   const form = useForm<PasswordFormValues>({
@@ -48,11 +46,9 @@ const UpdatePasswordModal = ({ open, setOpen }: UpdatePasswordModalProps) => {
   });
 
   const handleSubmit = async (values: PasswordFormValues) => {
-    if (!user?._id) return;
     setLoading(true);
     try {
       await updatePassword({
-        userId: user._id,
         currentPassword: values.currentPassword,
         newPassword: values.newPassword,
       });
