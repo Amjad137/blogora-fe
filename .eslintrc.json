@@ -1,0 +1,26 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:react-hooks/recommended",
+    "plugin:sonarjs/recommended-legacy"
+  ],
+  "plugins": ["prettier", "sonarjs"],
+  "rules": {
+    "no-unused-expressions": "warn",
+    "sonarjs/cognitive-complexity": "off",
+    "sonarjs/no-identical-expressions": "error",
+    "sonarjs/non-existent-operator": "error",
+    "sonarjs/no-use-of-empty-return-value": "error",
+    "sonarjs/no-identical-conditions": "error",
+    "sonarjs/no-extra-arguments": "error",
+    "sonarjs/no-useless-catch": "error",
+    "sonarjs/prefer-immediate-return": "error",
+    "sonarjs/no-duplicate-string": "off",
+    "sonarjs/no-commented-code": "warn",
+    "sonarjs/todo-tag": "warn",
+    "react-hooks/exhaustive-deps": "error",
+    "no-console": ["warn", { "allow": ["error", "warn"] }],
+    "@typescript-eslint/no-explicit-any": "warn"
+  }
+}

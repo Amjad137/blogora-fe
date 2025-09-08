@@ -1,0 +1,17 @@
+{
+    "cSpell.words": [
+        "autotable",
+        "easna",
+        "IENTRY",
+        "sonarjs",
+        "sonner"
+    ], 
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always",
+        "source.fixAll": "always",
+        "source.organizeImports": "always"
+    },
+    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+    "eslint.run": "onType",
+    "editor.formatOnSave": true
+}
