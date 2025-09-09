@@ -140,7 +140,7 @@ export const unpublishPost = async (postId: string): Promise<PostResponseDTO> =>
 
 export const deletePost = async (postId: string): Promise<null> => {
   try {
-    const response = await Axios.delete<ICommonResponseDTO<null>>(`/v1/posts/admin/${postId}`);
+    const response = await Axios.delete<ICommonResponseDTO<null>>(`/v1/posts/${postId}`);
     return response.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {

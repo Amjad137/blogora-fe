@@ -15,6 +15,8 @@ import { getUserInitials } from '@/utils/user-utils';
 import { formatTimeAgo } from '@/utils/common-utils';
 import Image from 'next/image';
 import { IUser } from '@/types/user.type';
+import { useAuthStore } from '@/stores/auth.store';
+import PostActions from './post-actions';
 
 interface PostCardProps {
   post: PostResponseDTO;
@@ -24,6 +26,7 @@ interface PostCardProps {
 export function PostCard({ post, className }: PostCardProps) {
   const [showFullContent, setShowFullContent] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const { user } = useAuthStore();
 
   const shouldTruncate = post.content.length > 200;
   const displayContent =
@@ -46,6 +49,7 @@ export function PostCard({ post, className }: PostCardProps) {
             </div>
             <p className='text-xs text-muted-foreground'>{formatTimeAgo(post.createdAt)}</p>
           </div>
+          {user?._id === (post.author as IUser | undefined)?._id && <PostActions post={post} />}
         </div>
 
         {/* Featured Image */}

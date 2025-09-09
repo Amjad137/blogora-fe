@@ -53,10 +53,22 @@ type Props = {
   children: React.ReactNode;
   editPost?: PostResponseDTO;
   onEditComplete?: () => void;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
 };
 
-const CreatePostDialog = ({ children, editPost, onEditComplete }: Props) => {
-  const [open, setOpen] = useState(false);
+const CreatePostDialog = ({
+  children,
+  editPost,
+  onEditComplete,
+  open: controlledOpen,
+  setOpen: setControlledOpen,
+}: Props) => {
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const isControlled =
+    typeof controlledOpen === 'boolean' && typeof setControlledOpen === 'function';
+  const open = isControlled ? controlledOpen : uncontrolledOpen;
+  const setOpen = isControlled ? setControlledOpen : setUncontrolledOpen;
   const [existingImageDeleted, setExistingImageDeleted] = useState(false);
   const [isDeletingImage, setIsDeletingImage] = useState(false);
   const { user } = useAuthStore();
