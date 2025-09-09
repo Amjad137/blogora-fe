@@ -9,7 +9,7 @@
     "dev:production": "yarn env:copy:production && next dev",
     "build": "yarn env:copy:dev && next build",
     "build:qa": "yarn env:copy:qa && next build",
-    "build:production": "next build",
+    "build:production": "yarn env:copy:production && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint . --fix",
