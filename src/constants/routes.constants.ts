@@ -6,6 +6,9 @@ export const ROUTES = {
   FORGOT_PASSWORD: '/auth/forgot-password',
   RESET_PASSWORD: '/auth/reset-password',
 
+  FEEDS: '/feeds',
+  DASHBOARD: '/dashboard',
+
   USERS_ROOT: '/users', //Access: Admin
 };
 

@@ -8,13 +8,7 @@ export interface IUser extends IBaseEntity {
   phoneNumber: string;
   role: USER_ROLE;
   avatar?: string;
-  address: IAddress;
+  address: string;
   isActive: boolean;
   isEmailVerified: boolean;
-}
-
-export interface IAddress {
-  line1: string; //16, Hapugedara lane
-  line2?: string; //Malwathe Road
-  city: string; //Colombo
 }

@@ -54,16 +54,9 @@ export const getSignupSchema = (mode: 'create' | 'edit' = 'create') => {
 
     profilePicture: mixed<string | File>().optional(),
 
-    address: object({
-      line1: string()
-        .required('Address line 1 is required')
-        .noSpecialChars('Address line 1 cannot contain special characters'),
-      line2: string().optional().noSpecialChars('Address line 2 cannot contain special characters'),
-      city: string()
-        .onlyLetters('City can only contain letters')
-        .required('City is required')
-        .noSpecialChars('City cannot contain special characters'),
-    }),
+    address: string()
+      .required('Address is required')
+      .noSpecialChars('Address cannot contain special characters'),
     email: string().email('Invalid email format').required('Email is required'),
     phoneNumber: string()
       .matches(/^\+?\d{10,15}$/, 'Please enter a valid phone number')

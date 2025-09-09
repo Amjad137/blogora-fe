@@ -30,11 +30,7 @@ const EditUserDialogAdmin = ({ open, setOpen, userData }: Props) => {
       phoneNumber: userData.phoneNumber ?? '',
       profilePicture: userData.avatar ?? '',
       email: userData.email ?? '',
-      address: {
-        line1: userData.address?.line1 ?? '',
-        line2: userData.address?.line2 ?? '',
-        city: userData.address?.city ?? '',
-      },
+      address: userData.address ?? '',
     },
   });
 
@@ -53,11 +49,7 @@ const EditUserDialogAdmin = ({ open, setOpen, userData }: Props) => {
         phoneNumber: userData.phoneNumber ?? '',
         email: userData.email ?? '',
         profilePicture: userData.avatar ?? '',
-        address: {
-          line1: userData.address?.line1 ?? '',
-          line2: userData.address?.line2 ?? '',
-          city: userData.address?.city ?? '',
-        },
+        address: userData.address ?? '',
       });
     }
   }, [open, userData, setValue, reset]);

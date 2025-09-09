@@ -28,11 +28,8 @@ const EditUserDialog = ({ open, setOpen, userData }: Props) => {
       lastName: userData.lastName ?? '',
       phoneNumber: userData.phoneNumber ?? '',
       profilePicture: userData.avatar ?? '',
-      address: {
-        line1: userData.address?.line1 ?? '',
-        line2: userData.address?.line2 ?? '',
-        city: userData.address?.city ?? '',
-      },
+      address: userData.address ?? '',
+      email: userData.email ?? '',
     },
   });
 
@@ -74,7 +71,7 @@ const EditUserDialog = ({ open, setOpen, userData }: Props) => {
 
       // Prepare update data with public URL (exclude profilePicture from values)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { profilePicture, ...cleanValues } = values;
+      const { profilePicture,email, ...cleanValues } = values;
       const updateData = {
         ...cleanValues,
         avatar,

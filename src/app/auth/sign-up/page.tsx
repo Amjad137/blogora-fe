@@ -37,11 +37,7 @@ const Signup = () => {
     defaultValues: {
       firstName: '',
       lastName: '',
-      address: {
-        line1: '',
-        line2: '',
-        city: '',
-      },
+      address: '',
       email: '',
       phoneNumber: '',
       password: '',
@@ -64,7 +60,6 @@ const Signup = () => {
             values.profilePicture,
             S3_FOLDERS.PROFILE_IMAGES,
           );
-          console.log('🚀 ~ signUpFormOnSubmit ~ uploadResult:', uploadResult);
           avatar = uploadResult.url; // Use public URL instead of key
           uploadedImageKey = uploadResult.key; // Store key for potential cleanup
         } catch (uploadError) {

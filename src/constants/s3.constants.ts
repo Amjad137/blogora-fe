@@ -11,16 +11,11 @@
  */
 export const S3_FOLDERS = {
   // Secure folders
-  DOCUMENTS: 'documents',
-  REPORTS: 'reports',
-  ACADEMIC_RECORDS: 'academic-records',
+  DOCUMENTS: 'protected/documents',
 
   // Public folders
-  PROFILE_IMAGES: 'profile-images',
-  EVENT_IMAGES: 'events',
-  SOCIAL_MEDIA: 'social-media',
-  ANNOUNCEMENTS: 'announcements',
-  GALLERY: 'gallery',
+  PROFILE_IMAGES: 'public/profile-images',
+  FEED_IMAGES: 'public/feed-images',
 } as const;
 
 /**

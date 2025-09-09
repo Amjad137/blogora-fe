@@ -1,3 +1,5 @@
+import { mixed } from 'yup';
+
 /**
  * Extract S3 key from a public S3 URL
  * @param url - The S3 URL (e.g., "https://bucket.s3.region.amazonaws.com/public/profile-images/123.jpg")
@@ -22,4 +24,23 @@ export const extractS3KeyFromUrl = (url: string | null | undefined): string | un
     console.warn('Failed to extract S3 key from URL:', url, error);
     return undefined;
   }
+};
+
+export const fileValidation = (allowEmptyValues?: boolean) => {
+  return mixed<File[]>().test(
+    'is-image',
+    'Invalid file format, should be jpg, jpeg, png or pdf',
+    (value) => {
+      if (allowEmptyValues && (!value || value.length === 0)) {
+        return true;
+      } else if (!value || value.length === 0) {
+        return false;
+      }
+
+      const fileExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
+      return Array.from(value).every((file) =>
+        fileExtensions.includes(file.name.split('.').pop()?.toLowerCase() as string),
+      );
+    },
+  );
 };

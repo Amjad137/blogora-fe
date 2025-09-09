@@ -1,6 +1,6 @@
 // Role-specific interfaces
 
-import { IAddress, IUser } from '@/types/user.type';
+import { IUser } from '@/types/user.type';
 
 export interface SignUpRequestDTO {
   firstName: string;
@@ -8,7 +8,7 @@ export interface SignUpRequestDTO {
   email: string;
   password: string;
   phoneNumber: string;
-  address: IAddress;
+  address: string;
   avatar?: string;
 }
 

@@ -73,9 +73,9 @@ export const fetchUserById = async (userId: string) => {
   }
 };
 
-export const updateUser = async (userId: string, data: DeepPartial<ISignupFormValues>) => {
+export const updateUser = async (data: DeepPartial<ISignupFormValues>) => {
   try {
-    const response = await Axios.patch<ICommonResponseDTO<IUser>>(`/v1/user/${userId}`, {
+    const response = await Axios.patch<ICommonResponseDTO<IUser>>(`/v1/users/me`, {
       ...data,
     });
 

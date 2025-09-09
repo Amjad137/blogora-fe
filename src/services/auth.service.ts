@@ -135,7 +135,7 @@ export const updatePassword = async ({
   newPassword: string;
 }) => {
   try {
-    const response = await Axios.patch<ICommonResponseDTO<{ message: string }>>(
+    const response = await Axios.post<ICommonResponseDTO<{ message: string }>>(
       `/v1/auth/change-password`,
       {
         currentPassword,

@@ -21,9 +21,10 @@ type Props = {
   isSubmitting: boolean;
   isEditing?: boolean;
   initialData?: ISignupFormValues;
+  isAdmin?: boolean;
 };
 
-const SignUpForm = ({ form, onSubmit, isSubmitting, isEditing }: Props) => {
+const SignUpForm = ({ form, onSubmit, isSubmitting, isEditing, isAdmin = false }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
@@ -77,6 +78,43 @@ const SignUpForm = ({ form, onSubmit, isSubmitting, isEditing }: Props) => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel required>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isEditing && !isAdmin}
+                      placeholder='ex: john@example.com'
+                      {...field}
+                    />
+                  </FormControl>
+                  {isEditing && !isAdmin && (
+                    <FormDescription>Email cannot be edited</FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='address'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel required>Address</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='16, Hapugedara Lane, Colombo'
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
 
@@ -85,57 +123,6 @@ const SignUpForm = ({ form, onSubmit, isSubmitting, isEditing }: Props) => {
           <h3 className='text-lg font-medium'>Profile Picture</h3>
           <ProfilePictureUpload form={form} isSubmitting={isSubmitting} isEditing={isEditing} />
         </div>
-
-        {/* Address Section */}
-        <div className='space-y-4'>
-          <h3 className='text-lg font-medium'>Address Information</h3>
-          <div className='grid grid-cols-1 gap-4'>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              <FormField
-                control={form.control}
-                name='address.line1'
-                render={({ field }) => (
-                  <FormItem className='col-span-full'>
-                    <FormLabel required>Address Line 1</FormLabel>
-                    <FormControl>
-                      <Input placeholder='16, Hapugedara Lane' {...field} disabled={isSubmitting} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='address.line2'
-                render={({ field }) => (
-                  <FormItem className='col-span-full'>
-                    <FormLabel>Address Line 2</FormLabel>
-                    <FormControl>
-                      <Input placeholder='Panama' {...field} disabled={isSubmitting} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='address.city'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel required>City</FormLabel>
-                    <FormControl>
-                      <Input placeholder='Colombo' {...field} disabled={isSubmitting} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-        </div>
-        {/* Role based details */}
 
         {/* Security Section */}
         {!isEditing && (

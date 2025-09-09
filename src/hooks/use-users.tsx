@@ -63,13 +63,8 @@ export const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      userId,
-      userData,
-    }: {
-      userId: string;
-      userData: DeepPartial<ISignupFormValues>;
-    }) => updateUser(userId, userData),
+    mutationFn: ({ userData }: { userData: DeepPartial<ISignupFormValues> }) =>
+      updateUser(userData),
     onMutate: () => {
       toast({
         title: 'Updating',
@@ -79,7 +74,7 @@ export const useUpdateUser = () => {
     onSuccess: (data, variables) => {
       // Update auth store if updating current user
       const { user: currentUser, updateUser: updateAuthUser } = useAuthStore.getState();
-      if (currentUser && currentUser._id === variables.userId) {
+      if (currentUser && currentUser._id === data._id) {
         updateAuthUser(variables.userData as Partial<IUser>);
       }
 
@@ -88,7 +83,7 @@ export const useUpdateUser = () => {
         description: 'Updated user successfully',
       });
       queryClient.invalidateQueries({
-        queryKey: ['userWithId', variables.userId],
+        queryKey: ['userWithId', data._id],
       });
 
       queryClient.invalidateQueries({ queryKey: ['users'] });

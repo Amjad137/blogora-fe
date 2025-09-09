@@ -84,15 +84,29 @@ export const usersTableColumns: ColumnDef<IUser>[] = [
     cell: ({ row }) => {
       return (
         <div className='flex flex-wrap items-center gap-2 text-xs font-normal text-left max-w-[200px] break-words'>
-          {row.original.address.line1}
-          {row.original.address.line2 && `, ${row.original.address.line2}`}
-          {`, ${row.original.address.city}`}
+          {row.original.address}
         </div>
       );
     },
     filterFn: multiColumnFilterFn,
   },
-
+  {
+    accessorKey: 'role',
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title='Role' />;
+    },
+    filterFn: multiColumnFilterFn,
+    cell: ({ row }) => {
+      return <Badge variant='outline'>{row.original.role}</Badge>;
+    },
+  },
+  {
+    accessorKey: 'isEmailVerified',
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title='Email Verified' />;
+    },
+    filterFn: multiColumnFilterFn,
+  },
   {
     accessorKey: 'isActive',
     header: ({ column }) => {

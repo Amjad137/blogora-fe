@@ -1,15 +1,13 @@
 import Axios from '@/config/api.config';
 import { ICommonResponseDTO } from '@/dto/common.dto';
-import { AxiosAuthRefreshRequestConfig } from 'axios-auth-refresh';
-
-export interface IPresignedUrlResponse {
-  key: string;
-  presignedUrl: string;
-}
-
-export interface IPublicUploadResponse extends IPresignedUrlResponse {
-  publicUrl: string;
-}
+import {
+  IPresignedUrlResponse,
+  IPublicUploadResponse,
+  IUploadRequest,
+  IDeleteFilesRequest,
+  IFileUrlResponse,
+  IUploadResponseWrapper,
+} from '@/dto/upload.dto';
 
 // Get presigned URL for secure uploads (documents, sensitive files)
 export const getSecureUploadUrl = async (
@@ -18,12 +16,14 @@ export const getSecureUploadUrl = async (
   keyCount = 1,
   oldKeys?: string[],
 ): Promise<IPresignedUrlResponse[]> => {
-  const response = await Axios.post<ICommonResponseDTO<IPresignedUrlResponse[]>>(
-    '/v1/s3/protected-upload',
-    { fileType, folder, keyCount, oldKeys },
-  );
+  const requestData: IUploadRequest = { fileType, folder, keyCount, oldKeys };
 
-  return response.data.data;
+  const response = await Axios.post<
+    ICommonResponseDTO<IUploadResponseWrapper<IPresignedUrlResponse>>
+  >('/v1/s3/protected-upload', requestData);
+
+  // Extract results from the response
+  return response.data.data.results;
 };
 
 // Get presigned URL for public uploads (images)
@@ -33,12 +33,14 @@ export const getPublicUploadUrl = async (
   keyCount = 1,
   oldKeys?: string[],
 ): Promise<IPublicUploadResponse[]> => {
-  const response = await Axios.post<ICommonResponseDTO<IPublicUploadResponse[]>>(
-    '/v1/s3/public-upload',
-    { fileType, folder, keyCount, oldKeys },
-  );
+  const requestData: IUploadRequest = { fileType, folder, keyCount, oldKeys };
 
-  return response.data.data;
+  const response = await Axios.post<
+    ICommonResponseDTO<IUploadResponseWrapper<IPublicUploadResponse>>
+  >('/v1/s3/public-upload', requestData);
+
+  // Extract results from the response
+  return response.data.data.results;
 };
 
 // Upload file to S3 using presigned URL
@@ -47,14 +49,17 @@ export const uploadToS3 = async (
   file: File,
   fileType: string,
 ): Promise<void> => {
-  const response = await Axios.put(presignedUrl, file, {
-    headers: { 'Content-Type': fileType },
-    skipAuth: true,
-    skipAuthRefresh: true,
-  } as AxiosAuthRefreshRequestConfig);
+  const response = await fetch(presignedUrl, {
+    method: 'PUT',
+    body: file,
+    headers: {
+      'Content-Type': fileType,
+    },
+  });
 
-  if (response.status !== 200) {
-    throw new Error(`Upload failed: ${response.status}`);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Upload failed: ${response.status} ${response.statusText} - ${errorText}`);
   }
 };
 
@@ -93,7 +98,6 @@ export const uploadPublicImage = async (
   }
 
   const uploads = await getPublicUploadUrl(file.type, folder, 1, oldKey ? [oldKey] : undefined);
-
   await uploadToS3(uploads[0].presignedUrl, file, file.type);
 
   return {
@@ -125,11 +129,14 @@ export const uploadMultiplePublicImages = async (
 
 // Delete files from S3
 export const deleteS3Files = async (keys: string[]): Promise<void> => {
-  await Axios.delete('/v1/s3/files', { data: { keys } });
+  const requestData: IDeleteFilesRequest = { keys };
+  await Axios.delete('/v1/s3/files', { data: requestData });
 };
 
 // Get file URL (secure or public)
 export const getFileUrl = async (key: string, isSecure = false): Promise<string | undefined> => {
-  const response = await Axios.get(`/v1/s3/file-url/${key}?secure=${isSecure}`);
+  const response = await Axios.get<ICommonResponseDTO<IFileUrlResponse>>(
+    `/v1/s3/file-url/${key}?secure=${isSecure}`,
+  );
   return response.data.data?.url;
 };

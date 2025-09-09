@@ -1,15 +1,11 @@
-export const formatGrade = (grade: string): string => {
-  // Handle empty or invalid input
-  if (!grade || !grade.includes('_')) return grade;
+export const formatTimeAgo = (dateString: string) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
 
-  // Extract the number part after the underscore
-  const gradeNumber = grade.split('_')[1];
-
-  // Return formatted string
-  return `Grade ${gradeNumber}`;
-};
-
-export const formatDate = (date: Date | string): string => {
-  if (!date) return 'N/A';
-  return new Date(date).toLocaleDateString();
+  if (diffInHours < 1) return 'Just now';
+  if (diffInHours < 24) return `${diffInHours}h ago`;
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (diffInDays < 7) return `${diffInDays}d ago`;
+  return date.toLocaleDateString();
 };

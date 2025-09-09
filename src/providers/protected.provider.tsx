@@ -15,7 +15,6 @@ interface ProtectedProps {
 }
 
 export const Protected = ({ children, allowedRoles }: ProtectedProps) => {
-  console.log('🚀 ~ Protected ~ allowedRoles:', allowedRoles);
   const router = useRouter();
   const { user, userRole, loading, isInitialized, isAuthenticated } = useAuthStore();
 
