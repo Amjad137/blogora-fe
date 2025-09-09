@@ -71,13 +71,13 @@ const EditUserDialog = ({ open, setOpen, userData }: Props) => {
 
       // Prepare update data with public URL (exclude profilePicture from values)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { profilePicture,email, ...cleanValues } = values;
+      const { profilePicture, email, ...cleanValues } = values;
       const updateData = {
         ...cleanValues,
         avatar,
       };
 
-      await updateUser({ userId: userData._id, userData: updateData });
+      await updateUser({ userData: updateData });
 
       // Update form field with new URL after successful upload
       if (avatar && avatar !== userData.avatar) {
